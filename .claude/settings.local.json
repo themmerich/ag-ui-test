@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C C:/git/ag-ui-test ls-files)",
+      "Bash(git -C C:/git/ag-ui-test/frontend ls-files)",
+      "Bash(git -C C:/git/ag-ui-test/frontend status --porcelain)",
+      "Bash(git -C C:/git/ag-ui-test/frontend log --oneline -5)"
+    ]
+  }
+}
