@@ -1,0 +1,18 @@
+<p-table [value]="rows()" styleClass="p-datatable-sm p-datatable-gridlines" [scrollable]="true">
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="supplement-col">Supplement</th>
+      @for (day of days(); track day) {
+        <th class="day-col">{{ day | date: 'EEE dd.MM' }}</th>
+      }
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-row>
+    <tr>
+      <td class="supplement-col">{{ row.supplement }}</td>
+      @for (taken of row.taken; track $index) {
+        <td class="day-col">{{ taken ? 'x' : '' }}</td>
+      }
+    </tr>
+  </ng-template>
+</p-table>

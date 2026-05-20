@@ -1,11 +1,8 @@
 <main class="app">
   <h1>{{ title() }}</h1>
-  <p>PrimeNG ist eingerichtet (Theme-Preset: Aura).</p>
+  <p>Supplement-Tracking — welche Supplements wurden pro Tag genommen?</p>
 
-  <div class="actions">
-    <p-button label="PrimeNG Button" icon="pi pi-check" />
-    <p-button label="Sekundär" icon="pi pi-star" severity="secondary" [outlined]="true" />
-  </div>
+  <app-supplement-table />
 </main>
 
 <router-outlet />
