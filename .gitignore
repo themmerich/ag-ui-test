@@ -13,6 +13,9 @@ $RECYCLE.BIN/
 *.ipr
 out/
 
+# ----- Claude Code -----
+.claude/
+
 # ----- Logs & Temp -----
 *.log
 *.tmp
