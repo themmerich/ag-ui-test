@@ -1,0 +1,8 @@
+# Build / dependency output
+dist/
+node_modules/
+.angular/
+coverage/
+
+# Lockfiles
+package-lock.json
