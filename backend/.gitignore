@@ -17,15 +17,6 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
@@ -33,5 +24,4 @@ out/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
+# IDE-/OS-Belange (IntelliJ, VS Code, OS-Dateien) werden zentral in der Root-.gitignore behandelt.
