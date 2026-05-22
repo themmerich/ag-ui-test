@@ -11,3 +11,17 @@
   text-align: center;
   white-space: nowrap;
 }
+
+.analysis {
+  margin-top: 1.5rem;
+}
+
+.analysis-result {
+  margin-top: 1rem;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.analysis-error {
+  color: #d33;
+}

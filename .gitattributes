@@ -1,0 +1,19 @@
+# Normalize line endings across all platforms.
+# Store LF in the repository and check out LF in the working tree, regardless of each
+# developer's core.autocrlf. This keeps Git, Prettier and the Angular/Gradle tooling in
+# agreement and prevents phantom "only line-ending changed" diffs on Windows.
+* text=auto eol=lf
+
+# Windows scripts must keep CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Known binaries — never apply EOL conversion
+*.jar binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary

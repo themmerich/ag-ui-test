@@ -4,5 +4,8 @@ node_modules/
 .angular/
 coverage/
 
+# Vendored library (kept as-is)
+libs/
+
 # Lockfiles
 package-lock.json

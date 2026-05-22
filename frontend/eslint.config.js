@@ -6,6 +6,10 @@ const angular = require("angular-eslint");
 const eslintConfigPrettier = require("eslint-config-prettier");
 
 module.exports = defineConfig([
+  // Vendored AG-UI client library — not linted.
+  {
+    ignores: ["libs/**"],
+  },
   {
     files: ["**/*.ts"],
     extends: [
