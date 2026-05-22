@@ -26,11 +26,26 @@ npm run format:check # Prettier --check
   (siehe `src/app/supplement/supplement.service.ts`). Nutzt das Backend-CORS; kein Dev-Proxy.
 - Für die Anzeige muss das Backend (`:8080`) laufen.
 
+## AG-UI (KI-Features)
+- **Vendored Lib** `libs/ag-ui-client` (aus Manfred Steyers Artikelserie) — kapselt `@ag-ui/client`
+  (`HttpAgent`). Import über den tsconfig-Pfad **`@internal/ag-ui-client`** (`tsconfig.json` → `paths`,
+  `baseUrl: "."`). Die Lib wird **unverändert** gepflegt → siehe „Lint & Format".
+- Nutzung: `chat = agUiResource({ url: 'http://localhost:8080/api/agui/analyze', tools: [] })`,
+  dann `chat.sendMessage({ role: 'user', content })`; `chat.value()` (Signal) liefert die Messages,
+  `chat.isLoading()` den Status. Beispiel: „Analysieren"-Button in `src/app/supplement/supplement-table.ts`.
+- Zusatz-Deps der Lib: `@ag-ui/client`, `ngx-markdown`, `@modelcontextprotocol/sdk` + `ext-apps`,
+  `zod`, `marked`. Die Markdown-/MCP-Teile werden für die Text-Analyse nur kompiliert, nicht genutzt
+  (für spätere Artikel-Features drin).
+- **`.npmrc` `legacy-peer-deps=true`** ist nötig: Angular CLI 21 bringt MCP-SDK 1.26 mit, `ext-apps`
+  will `^1.29` → ohne den Eintrag scheitert `npm install` am Peer-Konflikt.
+
 ## Lint & Format
 - **ESLint**: Flat-Config `eslint.config.js` (`typescript-eslint` + `angular-eslint`).
   `eslint-config-prettier` steht **als letzter Eintrag** → keine Formatierungs-Konflikte mit Prettier.
 - **Prettier**: Config in `package.json` (`printWidth: 100`, `singleQuote: true`, HTML-Parser für
   Templates). Nach Code-Änderungen `npm run lint` und `npm run format:check` grün halten.
+- Das vendored **`libs/**`** ist von ESLint (`eslint.config.js` → `ignores`) und Prettier
+  (`.prettierignore`) **ausgenommen** — nicht linten/formatieren.
 
 ## Konventionen
 - Dateinamen/Klassen **ohne** `Component`-Suffix (z. B. `app.ts` → `App`,

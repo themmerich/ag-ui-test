@@ -30,8 +30,19 @@ DB angebunden wird, diesen Exclude entfernen und Datasource-Properties ergänzen
 ## REST-API
 - `GET /api/supplements/tracking` → Supplement-Tracking-Testdaten (in-memory, deterministisch).
   Lesend, keine Datenmanipulation.
+- `POST /api/agui/analyze` (`text/event-stream`) → **AG-UI**-Endpoint (Package `de.primeux.demo.agui`).
+  Streamt AG-UI-Events (`RUN_STARTED` → `TEXT_MESSAGE_START` → `TEXT_MESSAGE_CONTENT*` →
+  `TEXT_MESSAGE_END` → `RUN_FINISHED`, sonst `RUN_ERROR`) als `Flux<ServerSentEvent>`, gespeist aus
+  einem Spring-AI-`ChatClient`-Stream. Die Events werden „von Hand" gebaut (`AgUiEvents`), keine
+  AG-UI-Lib. Request-DTO `RunAgentInput` ignoriert unbekannte Felder.
 - CORS: `config/WebConfig.java` (global, Mapping `/**`), erlaubte Origins via
   `app.cors.allowed-origins` (Default `http://localhost:4200`).
+
+## KI / Anthropic-Key
+- KI über `spring-ai-starter-model-anthropic` (`ChatClient.Builder` auto-konfiguriert).
+- `application.properties`: `spring.ai.anthropic.api-key=${ANTHROPIC_API_KEY:}`. Die App **bootet
+  ohne** Key; der Key wird erst beim `/api/agui/analyze`-Call gebraucht (sonst `RUN_ERROR`/401).
+  Key als **Env-Var** setzen (IntelliJ-Run-Config), nicht committen.
 
 ## Konventionen
 - DTOs als **Java `record`s**, Konstruktor-Injection (kein Field-Injection).
