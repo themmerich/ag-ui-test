@@ -19,6 +19,12 @@ Spring-Boot-App erkannt).
   `app.cors.allowed-origins`).
 - Für End-to-End müssen **beide** Server laufen.
 
+## KI-Features (AG-UI)
+KI läuft über den **AG-UI**-Standard: Backend streamt AG-UI-Events als SSE
+(`POST /api/agui/analyze`, Spring AI Anthropic), Frontend konsumiert sie über die vendored Lib
+`frontend/libs/ag-ui-client`. Erstes Feature: „Analysieren"-Button an der Supplement-Tabelle.
+Details in `backend/CLAUDE.md` und `frontend/CLAUDE.md`. Braucht `ANTHROPIC_API_KEY` zur Laufzeit.
+
 ## Git-Workflow
 - `main` ist der Haupt-Branch. Pro Aufgabe ein `feature/<name>`-Branch von `main`.
 - Ablauf: Branch → committen → pushen → **PR gegen `main`**. Der Nutzer reviewt und merged selbst
@@ -28,5 +34,5 @@ Spring-Boot-App erkannt).
 ## Konventionen
 - `.gitignore` ist dreistufig (Root + `backend/` + `frontend/`). Root ignoriert OS-/IDE-Dateien,
   `.idea/` und `.claude/`.
-- Auf Windows erzeugt Git LF↔CRLF-Warnungen; rein zeilenend-bedingte „Änderungen" ohne Inhaltsdiff
-  nicht mitcommitten.
+- Zeilenenden sind via Root-`.gitattributes` auf **LF** normalisiert (`* text=auto eol=lf`,
+  `*.bat`/`*.cmd` → CRLF). Das verhindert CRLF/LF-Churn auf Windows unabhängig von `core.autocrlf`.
