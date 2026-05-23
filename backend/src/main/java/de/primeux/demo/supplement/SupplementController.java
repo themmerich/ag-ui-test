@@ -2,6 +2,7 @@ package de.primeux.demo.supplement;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /** Read-only REST API for the supplement tracking table. */
@@ -15,8 +16,10 @@ public class SupplementController {
         this.supplementService = supplementService;
     }
 
+    /** Tracking for the last {@code days} days (default 7, clamped to 1..30 by the service). */
     @GetMapping("/tracking")
-    public SupplementTrackingResponse getTracking() {
-        return supplementService.getTracking();
+    public SupplementTrackingResponse getTracking(
+            @RequestParam(name = "days", defaultValue = "7") int days) {
+        return supplementService.getTracking(days);
     }
 }
