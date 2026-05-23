@@ -20,10 +20,12 @@ Spring-Boot-App erkannt).
 - Für End-to-End müssen **beide** Server laufen.
 
 ## KI-Features (AG-UI)
-KI läuft über den **AG-UI**-Standard: Backend streamt AG-UI-Events als SSE
-(`POST /api/agui/analyze`, Spring AI Anthropic), Frontend konsumiert sie über die vendored Lib
-`frontend/libs/ag-ui-client`. Erstes Feature: „Analysieren"-Button an der Supplement-Tabelle.
-Details in `backend/CLAUDE.md` und `frontend/CLAUDE.md`. Braucht `ANTHROPIC_API_KEY` zur Laufzeit.
+KI läuft über den **AG-UI**-Standard: Das Backend streamt AG-UI-Events als SSE (Spring AI Anthropic),
+das Frontend konsumiert sie über die vendored Lib `frontend/libs/ag-ui-client` (`agUiResource`).
+Endpoints: `POST /api/agui/analyze` (einmalige Tabellen-Analyse, „Analysieren"-Button) und
+`POST /api/agui/chat` (Chat-Sidebar, Multi-Turn). Der Chat-Agent hat ein Server-Tool, mit dem er die
+Einnahmedaten nachschlägt; Tool-Aufrufe werden im Chat angezeigt. Details in den Subprojekt-Docs.
+Braucht `ANTHROPIC_API_KEY` zur Laufzeit.
 
 ## Git-Workflow
 - `main` ist der Haupt-Branch. Pro Aufgabe ein `feature/<name>`-Branch von `main`.

@@ -28,15 +28,24 @@ spring.autoconfigure.exclude=org.springframework.boot.jdbc.autoconfigure.DataSou
 DB angebunden wird, diesen Exclude entfernen und Datasource-Properties ergänzen.
 
 ## REST-API
-- `GET /api/supplements/tracking` → Supplement-Tracking-Testdaten (in-memory, deterministisch).
-  Lesend, keine Datenmanipulation.
-- `POST /api/agui/analyze` (`text/event-stream`) → **AG-UI**-Endpoint (Package `de.primeux.demo.agui`).
-  Streamt AG-UI-Events (`RUN_STARTED` → `TEXT_MESSAGE_START` → `TEXT_MESSAGE_CONTENT*` →
-  `TEXT_MESSAGE_END` → `RUN_FINISHED`, sonst `RUN_ERROR`) als `Flux<ServerSentEvent>`, gespeist aus
-  einem Spring-AI-`ChatClient`-Stream. Die Events werden „von Hand" gebaut (`AgUiEvents`), keine
-  AG-UI-Lib. Request-DTO `RunAgentInput` ignoriert unbekannte Felder.
-- CORS: `config/WebConfig.java` (global, Mapping `/**`), erlaubte Origins via
-  `app.cors.allowed-origins` (Default `http://localhost:4200`).
+**Supplements** (`de.primeux.demo.supplement`)
+- `GET /api/supplements/tracking?days=N` → Tracking-Matrix der letzten N Tage (Default 7, clamp 1–30).
+- `GET /api/supplements/day/{date}` → Einnahme eines Tages (`existing=false` + alle `taken=false`, wenn
+  noch nichts gespeichert).
+- `PUT /api/supplements/day/{date}` → Tag anlegen/aktualisieren.
+- Daten in einem **mutierbaren In-Memory-Store** (`SupplementService`: beim Start mit 30 Tagen
+  deterministisch geseedet; PUT überschreibt einen Tag; resettet bei Neustart, da keine DB).
+
+**AG-UI** (`de.primeux.demo.agui`, alle `text/event-stream`)
+- `POST /api/agui/analyze` → einmalige Analyse der Tabellendaten.
+- `POST /api/agui/chat` → Multi-Turn-Chat (`ChatService` mappt den vollen Verlauf auf Spring-AI-Messages).
+- Events (`RUN_STARTED` → `TEXT_MESSAGE_*` → `RUN_FINISHED`, sonst `RUN_ERROR`) werden „von Hand" gebaut
+  (`AgUiEvents`/`AgUiStreamer`), keine AG-UI-Java-Lib. `RunAgentInput` ignoriert unbekannte Felder.
+- **Tool-Calling**: `SupplementQueryService` (`@Tool getSupplementIntake(days)`) ist im Chat registriert.
+  Spring AI verdeckt interne Tool-Calls im Stream → `EmittingToolCallback` sendet `TOOL_CALL_*`-Events
+  über einen Seitenkanal (mit dem Text-Stream gemerged), damit der Client sie anzeigen kann.
+
+CORS: `config/WebConfig.java` (global `/**`), Origins via `app.cors.allowed-origins` (Default `:4200`).
 
 ## KI / Anthropic-Key
 - KI über `spring-ai-starter-model-anthropic` (`ChatClient.Builder` auto-konfiguriert).
@@ -48,4 +57,4 @@ DB angebunden wird, diesen Exclude entfernen und Datasource-Properties ergänzen
 - DTOs als **Java `record`s**, Konstruktor-Injection (kein Field-Injection).
 - REST-Endpunkte unter `/api/**`. Feature-Packages unter `de.primeux.demo.<feature>`
   (z. B. `supplement/` mit Controller + Service + Records).
-- In-Memory-Testdaten in einem `@Service` halten; deterministisch, nicht random.
+- In-Memory-Daten in einem `@Service` halten (mutierbarer Store, beim Start deterministisch geseedet — nicht random).
