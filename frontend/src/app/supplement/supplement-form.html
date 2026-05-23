@@ -1,0 +1,50 @@
+<section class="form">
+  <div class="form-header">
+    <h2>Supplement-Daten erfassen</h2>
+    <p-button
+      label="Zurück"
+      icon="pi pi-arrow-left"
+      severity="secondary"
+      [text]="true"
+      routerLink="/"
+    />
+  </div>
+
+  <div class="field">
+    <label for="date">Datum</label>
+    <p-datepicker
+      inputId="date"
+      [ngModel]="date()"
+      (ngModelChange)="onDate($event)"
+      dateFormat="dd.mm.yy"
+      [showIcon]="true"
+    />
+  </div>
+
+  <p class="status">
+    @if (existing()) {
+      Vorhandene Daten für diesen Tag geladen — du kannst sie aktualisieren.
+    } @else {
+      Neuer Tag — noch keine Daten erfasst.
+    }
+  </p>
+
+  <div class="intakes">
+    @for (intake of intakes(); track intake.supplement; let i = $index) {
+      <div class="intake">
+        <p-checkbox
+          [binary]="true"
+          [inputId]="'cb-' + i"
+          [ngModel]="intake.taken"
+          (ngModelChange)="setTaken(intake.supplement, $event)"
+        />
+        <label [for]="'cb-' + i">{{ intake.supplement }}</label>
+      </div>
+    }
+  </div>
+
+  <div class="actions">
+    <p-button label="Speichern" icon="pi pi-check" [loading]="saving()" (onClick)="save()" />
+    <p-button label="Abbrechen" severity="secondary" [text]="true" routerLink="/" />
+  </div>
+</section>

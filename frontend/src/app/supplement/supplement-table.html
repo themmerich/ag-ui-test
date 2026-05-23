@@ -1,3 +1,9 @@
+<p-toolbar class="toolbar">
+  <ng-template pTemplate="end">
+    <p-button label="Neu" icon="pi pi-plus" routerLink="/supplements/new" />
+  </ng-template>
+</p-toolbar>
+
 <p-table [value]="rows()" styleClass="p-datatable-sm p-datatable-gridlines" [scrollable]="true">
   <ng-template pTemplate="header">
     <tr>

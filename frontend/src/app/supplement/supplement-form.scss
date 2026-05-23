@@ -1,0 +1,48 @@
+:host {
+  display: block;
+}
+
+.form {
+  max-width: 32rem;
+}
+
+.form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 1rem 0;
+}
+
+.status {
+  color: var(--p-text-muted-color, #888);
+  font-size: 0.9rem;
+}
+
+.intakes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.intake {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.intake label {
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+}
