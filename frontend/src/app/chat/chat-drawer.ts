@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, afterRenderEffect, signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { agUiResource } from '@internal/ag-ui-client';
 import { MarkdownComponent } from 'ngx-markdown';
@@ -15,6 +15,8 @@ import { openSupplementFormTool } from '../supplement/tools/open-supplement-form
   styleUrl: './chat-drawer.scss',
 })
 export class ChatDrawer {
+  private readonly messagesEl = viewChild<ElementRef<HTMLElement>>('messagesEl');
+
   protected readonly visible = signal(false);
   protected readonly draft = signal('');
 
@@ -24,8 +26,24 @@ export class ChatDrawer {
     tools: [openSupplementFormTool],
   });
 
+  constructor() {
+    // Keep the conversation scrolled to the bottom as messages arrive / stream in.
+    afterRenderEffect(() => {
+      this.chat.value();
+      const el = this.messagesEl()?.nativeElement;
+      if (el) {
+        el.scrollTop = el.scrollHeight;
+      }
+    });
+  }
+
   protected open(): void {
     this.visible.set(true);
+  }
+
+  protected reset(): void {
+    this.chat.reset();
+    this.draft.set('');
   }
 
   protected send(): void {
