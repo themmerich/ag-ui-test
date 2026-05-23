@@ -1,0 +1,56 @@
+.chat-fab {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1100;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: calc(100vh - 14rem);
+  overflow-y: auto;
+  padding-bottom: 1rem;
+}
+
+.messages-empty {
+  color: var(--p-text-muted-color, #888);
+  font-size: 0.9rem;
+}
+
+.msg {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.6rem;
+  max-width: 90%;
+  word-break: break-word;
+}
+
+.msg-user {
+  align-self: flex-end;
+  background: var(--p-primary-100, #e0e7ff);
+  white-space: pre-wrap;
+}
+
+.msg-assistant {
+  align-self: flex-start;
+  background: var(--p-surface-100, #f1f5f9);
+}
+
+.msg-error {
+  align-self: stretch;
+  color: #d33;
+  white-space: pre-wrap;
+}
+
+.composer {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+  margin-top: 1rem;
+}
+
+.composer textarea {
+  flex: 1;
+  resize: none;
+}
