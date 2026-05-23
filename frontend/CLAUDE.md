@@ -26,13 +26,24 @@ npm run format:check # Prettier --check
   (siehe `src/app/supplement/supplement.service.ts`). Nutzt das Backend-CORS; kein Dev-Proxy.
 - Für die Anzeige muss das Backend (`:8080`) laufen.
 
+## Seiten / Routing
+- `app.routes.ts`: `''` → `supplement/supplement-table` (Übersicht: Tabelle + „Analysieren"),
+  `supplements/new` → `supplement/supplement-form` (Tag erfassen: Datepicker + Checkbox je Supplement).
+  Shell (`app.html`) = `h1` + `<router-outlet/>` + `<app-chat-drawer/>`.
+- Daten-Service `supplement/supplement.service.ts`: `getTracking()`, `getDay(date)`, `saveDay(date, …)`.
+- Genutzte PrimeNG-Komponenten: `p-table`, `p-toolbar`, `p-button`, `p-drawer` (Chat),
+  `p-datepicker` + `p-checkbox` (Formular).
+
 ## AG-UI (KI-Features)
 - **Vendored Lib** `libs/ag-ui-client` (aus Manfred Steyers Artikelserie) — kapselt `@ag-ui/client`
   (`HttpAgent`). Import über den tsconfig-Pfad **`@internal/ag-ui-client`** (`tsconfig.json` → `paths`,
   `baseUrl: "."`). Die Lib wird **unverändert** gepflegt → siehe „Lint & Format".
-- Nutzung: `chat = agUiResource({ url: 'http://localhost:8080/api/agui/analyze', tools: [] })`,
-  dann `chat.sendMessage({ role: 'user', content })`; `chat.value()` (Signal) liefert die Messages,
-  `chat.isLoading()` den Status. Beispiel: „Analysieren"-Button in `src/app/supplement/supplement-table.ts`.
+- Nutzung: `chat = agUiResource({ url, tools: [] })`, dann `chat.sendMessage({ role:'user', content })`;
+  `chat.value()` (Signal) liefert die Messages, `chat.isLoading()` den Status. Zwei Stellen:
+  „Analysieren"-Button (`supplement/supplement-table.ts` → `/api/agui/analyze`) und Chat-Sidebar
+  (`chat/chat-drawer.ts` → `/api/agui/chat`, PrimeNG `p-drawer`).
+- Assistant-Text wird als **Markdown** gerendert (`provideMarkdown()` in `app.config.ts`).
+  `message.toolCalls` wird im Chat als ausgegraute „Tool Call: …"-Zeile angezeigt.
 - Zusatz-Deps der Lib: `@ag-ui/client`, `ngx-markdown`, `@modelcontextprotocol/sdk` + `ext-apps`,
   `zod`, `marked`. Die Markdown-/MCP-Teile werden für die Text-Analyse nur kompiliert, nicht genutzt
   (für spätere Artikel-Features drin).
