@@ -1,14 +1,16 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { agUiResource } from '@internal/ag-ui-client';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { ToolbarModule } from 'primeng/toolbar';
 import { SupplementRow } from './supplement.model';
 import { SupplementService } from './supplement.service';
 
 @Component({
   selector: 'app-supplement-table',
-  imports: [TableModule, ButtonModule, DatePipe],
+  imports: [TableModule, ButtonModule, ToolbarModule, DatePipe, RouterLink],
   templateUrl: './supplement-table.html',
   styleUrl: './supplement-table.scss',
 })
