@@ -59,6 +59,13 @@ public final class AgUiEvents {
         return e;
     }
 
+    public static Map<String, Object> toolCallArgs(String toolCallId, String delta) {
+        Map<String, Object> e = base("TOOL_CALL_ARGS");
+        e.put("toolCallId", toolCallId);
+        e.put("delta", delta);
+        return e;
+    }
+
     public static Map<String, Object> toolCallEnd(String toolCallId) {
         Map<String, Object> e = base("TOOL_CALL_END");
         e.put("toolCallId", toolCallId);
