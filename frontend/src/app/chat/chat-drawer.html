@@ -9,51 +9,56 @@
 <p-drawer
   [visible]="visible()"
   (visibleChange)="visible.set($event)"
-  header="Chat"
   position="right"
   styleClass="chat-drawer"
   [style]="{ width: 'min(34rem, 92vw)' }"
 >
-  <div class="messages">
-    @for (message of chat.value(); track message.id) {
-      @for (tool of message.toolCalls; track tool.id) {
-        <div class="tool-call">
-          <em>Tool Call: {{ tool.name }}</em>
-        </div>
-      }
-      @if (message.content) {
-        <div
-          class="msg"
-          [class.msg-user]="message.role === 'user'"
-          [class.msg-assistant]="message.role === 'assistant'"
-          [class.msg-error]="message.role === 'error'"
-        >
-          @if (message.role === 'assistant') {
-            <markdown [data]="message.content" />
-          } @else {
-            {{ message.content }}
-          }
-        </div>
-      }
-    } @empty {
-      <p class="messages-empty">Stell dem Assistenten eine Frage zu deinen Supplements.</p>
-    }
-  </div>
+  <ng-template #headless>
+    <div class="chat-body">
+      <div class="chat-toolbar">
+        <p-button
+          label="Zurücksetzen"
+          icon="pi pi-refresh"
+          severity="secondary"
+          [text]="true"
+          (onClick)="reset()"
+        />
+      </div>
 
-  <div class="composer">
-    <textarea
-      pTextarea
-      rows="2"
-      placeholder="Nachricht … (Enter zum Senden)"
-      [ngModel]="draft()"
-      (ngModelChange)="draft.set($event)"
-      (keydown.enter)="$event.preventDefault(); send()"
-    ></textarea>
-    <p-button
-      icon="pi pi-send"
-      ariaLabel="Senden"
-      [disabled]="chat.isLoading() || !draft().trim()"
-      (onClick)="send()"
-    />
-  </div>
+      <div class="messages" #messagesEl>
+        @for (message of chat.value(); track message.id) {
+          @for (tool of message.toolCalls; track tool.id) {
+            <div class="tool-call">
+              <em>Tool Call: {{ tool.name }}</em>
+            </div>
+          }
+          @if (message.content) {
+            <div
+              class="msg"
+              [class.msg-user]="message.role === 'user'"
+              [class.msg-assistant]="message.role === 'assistant'"
+              [class.msg-error]="message.role === 'error'"
+            >
+              @if (message.role === 'assistant') {
+                <markdown [data]="message.content" />
+              } @else {
+                {{ message.content }}
+              }
+            </div>
+          }
+        }
+      </div>
+
+      <div class="composer">
+        <textarea
+          pTextarea
+          rows="4"
+          placeholder="Nachricht … (Enter zum Senden)"
+          [ngModel]="draft()"
+          (ngModelChange)="draft.set($event)"
+          (keydown.enter)="$event.preventDefault(); send()"
+        ></textarea>
+      </div>
+    </div>
+  </ng-template>
 </p-drawer>
