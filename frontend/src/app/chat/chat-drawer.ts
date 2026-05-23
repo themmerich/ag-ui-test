@@ -5,6 +5,7 @@ import { MarkdownComponent } from 'ngx-markdown';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { TextareaModule } from 'primeng/textarea';
+import { openSupplementFormTool } from '../supplement/tools/open-supplement-form.tool';
 
 /** Right-side chat sidebar (PrimeNG p-drawer) for a multi-turn chat with the AG-UI agent. */
 @Component({
@@ -17,10 +18,10 @@ export class ChatDrawer {
   protected readonly visible = signal(false);
   protected readonly draft = signal('');
 
-  /** AG-UI agent (Manfred Steyer lib) — multi-turn chat endpoint. */
+  /** AG-UI agent (Manfred Steyer lib) — multi-turn chat endpoint with the client tool. */
   protected readonly chat = agUiResource({
     url: 'http://localhost:8080/api/agui/chat',
-    tools: [],
+    tools: [openSupplementFormTool],
   });
 
   protected open(): void {

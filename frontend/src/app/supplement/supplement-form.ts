@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -17,6 +17,7 @@ import { SupplementService } from './supplement.service';
 export class SupplementForm implements OnInit {
   private readonly service = inject(SupplementService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   protected readonly date = signal<Date>(new Date());
   protected readonly intakes = signal<SupplementIntake[]>([]);
@@ -24,7 +25,18 @@ export class SupplementForm implements OnInit {
   protected readonly saving = signal(false);
 
   ngOnInit(): void {
-    this.load(this.date());
+    const initial = this.parseDate(this.route.snapshot.queryParamMap.get('date')) ?? new Date();
+    this.date.set(initial);
+    this.load(initial);
+  }
+
+  /** Parses a yyyy-MM-dd query param into a local Date, or null if absent/invalid. */
+  private parseDate(value: string | null): Date | null {
+    const match = value ? /^(\d{4})-(\d{2})-(\d{2})$/.exec(value) : null;
+    if (!match) {
+      return null;
+    }
+    return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
   }
 
   protected onDate(date: Date | null): void {
