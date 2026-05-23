@@ -16,18 +16,25 @@
 >
   <div class="messages">
     @for (message of chat.value(); track message.id) {
-      <div
-        class="msg"
-        [class.msg-user]="message.role === 'user'"
-        [class.msg-assistant]="message.role === 'assistant'"
-        [class.msg-error]="message.role === 'error'"
-      >
-        @if (message.role === 'assistant') {
-          <markdown [data]="message.content" />
-        } @else {
-          {{ message.content }}
-        }
-      </div>
+      @for (tool of message.toolCalls; track tool.id) {
+        <div class="tool-call">
+          <em>Tool Call: {{ tool.name }}</em>
+        </div>
+      }
+      @if (message.content) {
+        <div
+          class="msg"
+          [class.msg-user]="message.role === 'user'"
+          [class.msg-assistant]="message.role === 'assistant'"
+          [class.msg-error]="message.role === 'error'"
+        >
+          @if (message.role === 'assistant') {
+            <markdown [data]="message.content" />
+          } @else {
+            {{ message.content }}
+          }
+        </div>
+      }
     } @empty {
       <p class="messages-empty">Stell dem Assistenten eine Frage zu deinen Supplements.</p>
     }

@@ -52,6 +52,28 @@ public final class AgUiEvents {
         return e;
     }
 
+    public static Map<String, Object> toolCallStart(String toolCallId, String toolCallName) {
+        Map<String, Object> e = base("TOOL_CALL_START");
+        e.put("toolCallId", toolCallId);
+        e.put("toolCallName", toolCallName);
+        return e;
+    }
+
+    public static Map<String, Object> toolCallEnd(String toolCallId) {
+        Map<String, Object> e = base("TOOL_CALL_END");
+        e.put("toolCallId", toolCallId);
+        return e;
+    }
+
+    public static Map<String, Object> toolCallResult(String toolCallId, String content) {
+        Map<String, Object> e = base("TOOL_CALL_RESULT");
+        e.put("messageId", toolCallId);
+        e.put("toolCallId", toolCallId);
+        e.put("content", content);
+        e.put("role", "tool");
+        return e;
+    }
+
     private static Map<String, Object> base(String type) {
         Map<String, Object> e = new LinkedHashMap<>();
         e.put("type", type);
