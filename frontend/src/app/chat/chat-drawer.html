@@ -1,0 +1,52 @@
+<p-button
+  class="chat-fab"
+  icon="pi pi-comments"
+  [rounded]="true"
+  ariaLabel="Chat öffnen"
+  (onClick)="open()"
+/>
+
+<p-drawer
+  [visible]="visible()"
+  (visibleChange)="visible.set($event)"
+  header="Chat"
+  position="right"
+  styleClass="chat-drawer"
+  [style]="{ width: 'min(34rem, 92vw)' }"
+>
+  <div class="messages">
+    @for (message of chat.value(); track message.id) {
+      <div
+        class="msg"
+        [class.msg-user]="message.role === 'user'"
+        [class.msg-assistant]="message.role === 'assistant'"
+        [class.msg-error]="message.role === 'error'"
+      >
+        @if (message.role === 'assistant') {
+          <markdown [data]="message.content" />
+        } @else {
+          {{ message.content }}
+        }
+      </div>
+    } @empty {
+      <p class="messages-empty">Stell dem Assistenten eine Frage zu deinen Supplements.</p>
+    }
+  </div>
+
+  <div class="composer">
+    <textarea
+      pTextarea
+      rows="2"
+      placeholder="Nachricht … (Enter zum Senden)"
+      [ngModel]="draft()"
+      (ngModelChange)="draft.set($event)"
+      (keydown.enter)="$event.preventDefault(); send()"
+    ></textarea>
+    <p-button
+      icon="pi pi-send"
+      ariaLabel="Senden"
+      [disabled]="chat.isLoading() || !draft().trim()"
+      (onClick)="send()"
+    />
+  </div>
+</p-drawer>
